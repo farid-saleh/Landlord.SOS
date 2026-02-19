@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Landlord SOS</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5;
+}
+
+.header {
+  background-color: #2563eb;
+  color: white;
+  padding: 30px;
+  text-align: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.header p {
+  margin: 10px 0 0 0;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.main {
+  max-width: 700px;
+  margin: 30px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.two-col {
+  display: flex;
+  gap: 16px;
+}
+
+.two-col .field {
+  flex: 1;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.btn-blue {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-blue:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-gray {
+  background-color: #e5e7eb;
+  color: #333;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-gray:hover {
+  background-color: #d1d5db;
+}
+
+.letter-box {
+  background-color: #f9fafb;
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  padding: 20px;
+  min-height: 200px;
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  color: #2563eb;
+}
+
+.draft-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.draft-card p {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #555;
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Landlord SOS</h1>
+  <p>Generate professional tenant notices in seconds.</p>
+</div>
+
+<div class="main">
+
+  <div class="section-title">Fill In The Details</div>
+
+  <div class="field">
+    <label>Issue Type</label>
+    <select id="issueType">
+      <option value="Late Rent">Late Rent</option>
+      <option value="Noise Complaint">Noise Complaint</option>
+      <option value="Property Damage">Property Damage</option>
+      <option value="Unauthorized Pet">Unauthorized Pet</option>
+      <option value="Lease Violation">Lease Violation</option>
+      <option value="Unauthorized Occupant">Unauthorized Occupant</option>
+      <option value="General Warning">General Warning</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Region</label>
+    <select id="region">
+      <option value="United States">United States</option>
+      <option value="United Kingdom">United Kingdom</option>
+      <option value="Canada">Canada</option>
+      <option value="Australia">Australia</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+  <div class="two-col">
+    <div class="field">
+      <label>Landlord Name</label>
+      <input type="text" id="landlordName" placeholder="John Smith">
+    </div>
+    <div class="field">
+      <label>Tenant Name</label>
+      <input type="text" id="tenantName" placeholder="Jane Doe">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Rental Property Address</label>
+    <input type="text" id="propertyAddress" placeholder="123 Main St, City, State, ZIP">
+  </div>
+
+  <div class="two-col">
+    <div class="field">
+      <label>Notice Date</label>
+      <input type="date" id="noticeDate">
+    </div>
+    <div class="field">
+      <label>Rent Amount</label>
+      <input type="text" id="rentAmount" placeholder="1200">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Additional Details (Optional)</label>
+    <textarea id="details" rows="4" placeholder="Add any extra info here..."></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-blue" onclick="doGenerate()">Generate Letter</button>
+    <button class="btn-gray" onclick="doPDF()">Download PDF</button>
+    <button class="btn-gray" onclick="doDOC()">Download DOC</button>
+    <button class="btn-gray" onclick="doEmail()">Email Letter</button>
+    <button class="btn-gray" onclick="doSave()">Save Draft</button>
+    <button class="btn-gray" onclick="doCopy()">Copy Text</button>
+    <button class="btn-gray" onclick="doClear()">Clear Form</button>
+  </div>
+
+  <div class="section-title">Letter Preview</div>
+  <div class="letter-box" id="letterBox">Your generated letter will appear here.</div>
+
+  <div class="section-title">Saved Drafts</div>
+  <div id="draftsArea">No saved drafts.</div>
+
+</div>
+
+<div class="footer">
+  Landlord SOS - This tool does not replace legal advice.
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<script>
+
+var theLetter = "";
+
+function doGenerate() {
+
+  var issueType = document.getElementById("issueType").value;
+  var region = document.getElementById("region").value;
+  var landlord = document.getElementById("landlordName").value;
+  var tenant = document.getElementById("tenantName").value;
+  var address = document.getElementById("propertyAddress").value;
+  var rent = document.getElementById("rentAmount").value;
+  var details = document.getElementById("details").value;
+  var dateVal = document.getElementById("noticeDate").value;
+
+  if (landlord === "") {
+    alert("Please enter the landlord name.");
+    return;
+  }
+
+  if (tenant === "") {
+    alert("Please enter the tenant name.");
+    return;
+  }
+
+  if (address === "") {
+    alert("Please enter the property address.");
+    return;
+  }
+
+  if (dateVal === "") {
+    var now = new Date();
+    var yy = now.getFullYear();
+    var mm = now.getMonth() + 1;
+    var dd = now.getDate();
+    if (mm < 10) { mm = "0" + mm; }
+    if (dd < 10) { dd = "0" + dd; }
+    dateVal = yy + "-" + mm + "-" + dd;
+  }
+
+  var L = "";
+
+  L = L + "========================================\n";
+  L = L + "         FORMAL TENANT NOTICE\n";
+  L = L + "========================================\n\n";
+
+  L = L + "Date: " + dateVal + "\n\n";
+
+  L = L + "From: " + landlord + "\n";
+  L = L + "To: " + tenant + "\n";
+  L = L + "Property: " + address + "\n\n";
+
+  L = L + "----------------------------------------\n";
+  L = L + "Subject: " + issueType + " Notice\n";
+  L = L + "----------------------------------------\n\n";
+
+  L = L + "Dear " + tenant + ",\n\n";
+
+  if (issueType === "Late Rent") {
+    L = L + "This letter serves as formal notice that ";
+    L = L + "your rent payment is currently past due ";
+    L = L + "for the above-referenced property.\n\n";
+    if (rent !== "") {
+      L = L + "The total outstanding balance is: $" + rent + "\n\n";
+    }
+    L = L + "You are hereby requested to submit your ";
+    L = L + "payment in full immediately. If payment ";
+    L = L + "is not received within the time frame ";
+    L = L + "permitted by law, further action may be ";
+    L = L + "taken, including but not limited to late ";
+    L = L + "fees, formal demand, or eviction proceedings.\n\n";
+    L = L + "If you have already submitted payment, ";
+    L = L + "please disregard this notice and contact ";
+    L = L + "me to confirm receipt.\n\n";
+  }
+
+  else if (issueType === "Noise Complaint") {
+    L = L + "This letter serves as formal notice ";
+    L = L + "regarding noise disturbances reported at ";
+    L = L + "the above-referenced property.\n\n";
+    L = L + "Excessive noise levels have been reported ";
+    L = L + "that are in violation of the terms of ";
+    L = L + "your lease agreement and may also violate ";
+    L = L + "local noise ordinances.\n\n";
+    L = L + "You are hereby requested to immediately ";
+    L = L + "reduce noise levels and ensure that all ";
+    L = L + "activity on the premises remains within ";
+    L = L + "acceptable limits at all times.\n\n";
+    L = L + "Continued violations may result in further ";
+    L = L + "action, including fines or lease termination.\n\n";
+  }
+
+  else if (issueType === "Property Damage") {
+    L = L + "This letter serves as formal notice ";
+    L = L + "regarding damage that has been reported ";
+    L = L + "or observed at the above-referenced property.\n\n";
+    L = L + "As a tenant, you are responsible for ";
+    L = L + "maintaining the property in good condition ";
+    L = L + "and reporting any damage promptly.\n\n";
+    L = L + "You are hereby requested to repair the ";
+    L = L + "damage at your own expense or contact me ";
+    L = L + "immediately to discuss a resolution. ";
+    L = L + "Failure to do so may result in deductions ";
+    L = L + "from your security deposit or further ";
+    L = L + "legal action.\n\n";
+  }
+
+  else if (issueType === "Unauthorized Pet") {
+    L = L + "This letter serves as formal notice that ";
+    L = L + "an unauthorized pet has been observed or ";
+    L = L + "reported at the above-referenced property.\n\n";
+    L = L + "Your current lease agreement does not ";
+    L = L + "permit pets on the premises without prior ";
+    L = L + "written approval from the landlord.\n\n";
+    L = L + "You are hereby requested to remove the ";
+    L = L + "pet from the property immediately or ";
+    L = L + "contact me to discuss obtaining proper ";
+    L = L + "authorization. Continued violation of this ";
+    L = L + "lease term may result in fines, lease ";
+    L = L + "termination, or other legal action.\n\n";
+  }
+
+  else if (issueType === "Lease Violation") {
+    L = L + "This letter serves as formal notice that ";
+    L = L + "you are currently in violation of one or ";
+    L = L + "more terms of your lease agreement for ";
+    L = L + "the above-referenced property.\n\n";
+    L = L + "You are hereby requested to correct the ";
+    L = L + "violation immediately and ensure full ";
+    L = L + "compliance with all lease terms going ";
+    L = L + "forward.\n\n";
+    L = L + "Failure to remedy this violation within ";
+    L = L + "the time frame permitted by law may result ";
+    L = L + "in lease termination, eviction proceedings, ";
+    L = L + "or other legal remedies.\n\n";
+  }
+
+  else if (issueType === "Unauthorized Occupant") {
+    L = L + "This letter serves as formal notice that ";
+    L = L + "an unauthorized occupant has been observed ";
+    L = L + "or reported residing at the above-referenced ";
+    L = L + "property.\n\n";
+    L = L + "Your lease agreement specifies the approved ";
+    L = L + "occupants of the unit. Any additional ";
+    L = L + "occupants must receive prior written ";
+    L = L + "approval from the landlord.\n\n";
+    L = L + "You are hereby requested to remove the ";
+    L = L + "unauthorized occupant immediately or ";
+    L = L + "contact me to request formal approval. ";
+    L = L + "Failure to comply may result in lease ";
+    L = L + "termination or legal action.\n\n";
+  }
+
+  else {
+    L = L + "This letter serves as a formal warning ";
+    L = L + "regarding an issue related to your tenancy ";
+    L = L + "at the above-referenced property.\n\n";
+    L = L + "You are hereby requested to address this ";
+    L = L + "matter promptly and ensure compliance with ";
+    L = L + "all terms of your lease agreement.\n\n";
+    L = L + "Failure to address this issue may result ";
+    L = L + "in further action as deemed appropriate.\n\n";
+  }
+
+  if (details !== "") {
+    L = L + "----------------------------------------\n";
+    L = L + "Additional Details:\n";
+    L = L + "----------------------------------------\n";
+    L = L + details + "\n\n";
+  }
+
+  L = L + "----------------------------------------\n";
+  L = L + "LEGAL NOTICE\n";
+  L = L + "----------------------------------------\n";
+  L = L + "This notice is provided in accordance with ";
+  L = L + "applicable landlord-tenant laws in " + region + ". ";
+  L = L + "Failure to comply with the requests stated ";
+  L = L + "above may result in further legal action, ";
+  L = L + "including but not limited to eviction ";
+  L = L + "proceedings, recovery of damages, or other ";
+  L = L + "remedies available under the law.\n\n";
+
+  L = L + "Please treat this matter with urgency.\n\n";
+
+  L = L + "Sincerely,\n\n";
+  L = L + landlord + "\n";
+  L = L + "(Landlord / Property Owner)\n\n";
+
+  L = L + "========================================\n";
+  L = L + "  This letter was generated using\n";
+  L = L + "  Landlord SOS - landlordsos.com\n";
+  L = L + "========================================\n";
+
+  theLetter = L;
+  document.getElementById("letterBox").textContent = L;
+}
+
+function doPDF() {
+  if (theLetter === "") {
+    alert("Generate a letter first.");
+    return;
+  }
+  var lib = window.jspdf;
+  var doc = new lib.jsPDF();
+  var lines = doc.splitTextToSize(theLetter, 170);
+  doc.setFont("courier");
+  doc.setFontSize(11);
+  doc.text(lines, 20, 20);
+  doc.save("tenant_notice.pdf");
+}
+
+function doDOC() {
+  if (theLetter === "") {
+    alert("Generate a letter first.");
+    return;
+  }
+  var h = "";
+  h = h + "<html>";
+  h = h + "<head>";
+  h = h + "<meta charset='utf-8'>";
+  h = h + "<style>";
+  h = h + "body{font-family:Courier New,monospace;font-size:14px;line-height:1.6;padding:40px;}";
+  h = h + "</style>";
+  h = h + "</head>";
+  h = h + "<body>";
+  h = h + "<pre>";
+  h = h + theLetter;
+  h = h + "</pre>";
+  h = h + "</body>";
+  h = h + "</html>";
+
+  var blob = new Blob([h], {type: "application/msword"});
+  var link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "tenant_notice.doc";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function doEmail() {
+  if (theLetter === "") {
+    alert("Generate a letter first.");
+    return;
+  }
+  var s = encodeURIComponent("Tenant Notice");
+  var b = encodeURIComponent(theLetter);
+  window.location.href = "mailto:?subject=" + s + "&body=" + b;
+}
+
+function doSave() {
+  if (theLetter === "") {
+    alert("Generate a letter first.");
+    return;
+  }
+  var raw = localStorage.getItem("myDrafts");
+  var drafts;
+  if (raw === null) {
+    drafts = [];
+  } else {
+    drafts = JSON.parse(raw);
+  }
+  var obj = {};
+  obj.id = Date.now();
+  obj.text = theLetter;
+  drafts.unshift(obj);
+  if (drafts.length > 10) {
+    drafts = drafts.slice(0, 10);
+  }
+  localStorage.setItem("myDrafts", JSON.stringify(drafts));
+  showDrafts();
+  alert("Draft saved!");
+}
+
+function showDrafts() {
+  var area = document.getElementById("draftsArea");
+  var raw = localStorage.getItem("myDrafts");
+  var drafts;
+  if (raw === null) {
+    drafts = [];
+  } else {
+    drafts = JSON.parse(raw);
+  }
+  if (drafts.length === 0) {
+    area.innerHTML = "No saved drafts.";
+    return;
+  }
+  var out = "";
+  var i;
+  for (i = 0; i < drafts.length; i++) {
+    var d = drafts[i];
+    var short = d.text.substring(0, 80);
+    short = short.replace(/\n/g, " ");
+    out = out + "<div class='draft-card'>";
+    out = out + "<p>" + short + "...</p>";
+    out = out + "<button class='btn-gray' onclick='doLoad(" + d.id + ")'>Load</button> ";
+    out = out + "<button class='btn-gray' onclick='doDelete(" + d.id + ")'>Delete</button>";
+    out = out + "</div>";
+  }
+  area.innerHTML = out;
+}
+
+function doLoad(id) {
+  var raw = localStorage.getItem("myDrafts");
+  var drafts;
+  if (raw === null) {
+    return;
+  }
+  drafts = JSON.parse(raw);
+  var i;
+  for (i = 0; i < drafts.length; i++) {
+    if (drafts[i].id === id) {
+      theLetter = drafts[i].text;
+      document.getElementById("letterBox").textContent = theLetter;
+      alert("Draft loaded!");
+      return;
+    }
+  }
+}
+
+function doDelete(id) {
+  var raw = localStorage.getItem("myDrafts");
+  var drafts;
+  if (raw === null) {
+    return;
+  }
+  drafts = JSON.parse(raw);
+  var keep = [];
+  var i;
+  for (i = 0; i < drafts.length; i++) {
+    if (drafts[i].id !== id) {
+      keep.push(drafts[i]);
+    }
+  }
+  localStorage.setItem("myDrafts", JSON.stringify(keep));
+  showDrafts();
+  alert("Draft deleted!");
+}
+
+function doCopy() {
+  if (theLetter === "") {
+    alert("Generate a letter first.");
+    return;
+  }
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(theLetter);
+    alert("Copied to clipboard!");
+  } else {
+    alert("Copy not supported in this browser.");
+  }
+}
+
+function doClear() {
+  document.getElementById("issueType").selectedIndex = 0;
+  document.getElementById("region").selectedIndex = 0;
+  document.getElementById("landlordName").value = "";
+  document.getElementById("tenantName").value = "";
+  document.getElementById("propertyAddress").value = "";
+  document.getElementById("noticeDate").value = "";
+  document.getElementById("rentAmount").value = "";
+  document.getElementById("details").value = "";
+  document.getElementById("letterBox").textContent = "Your generated letter will appear here.";
+  theLetter = "";
+}
+
+window.onload = function() {
+  showDrafts();
+};
+
+</script>
+
+</body>
+</html>
